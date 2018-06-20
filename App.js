@@ -1,13 +1,25 @@
+import * as firebase from 'firebase'
+
 import React from 'react';
 import { Platform } from 'react-native'
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator } from 'react-navigation'
 import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
+import { FIREBASE_API_KEY, FIREBASE_AUTH_DOMAIN, FIREBASE_DATABASE_URL, FIREBASE_PROJECT_ID } from 'react-native-dotenv'
 import IntroScreen from './screens/IntroScreen'
 import SignInScreen from './screens/SignInScreen'
 import MyComicBooksRecordScreen from './screens/MyComicBooksRecordScreen'
 import AppConfigScreen from './screens/AppConfigScreen'
+
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: FIREBASE_API_KEY,
+  authDomain: FIREBASE_AUTH_DOMAIN,
+  databaseURL: FIREBASE_DATABASE_URL,
+  projectId: FIREBASE_PROJECT_ID  
+};
+
+firebase.initializeApp(firebaseConfig);
 
 const tabInfo = {
   Timeline: {
@@ -41,10 +53,6 @@ const getLabel = (navigation) => {
   return tabInfo[routeName] ? tabInfo[routeName].label : ''
 }
 
-const AuthStack = createStackNavigator({
-  SignIn: SignInScreen
-})
-
 const MyComicBooksRecordStack = createStackNavigator({
   List: MyComicBooksRecordScreen
 }, {
@@ -68,7 +76,7 @@ const AppNavigator = createBottomTabNavigator({
 export default createSwitchNavigator(
   {
     Intro: IntroScreen,
-    Auth: AuthStack,
+    Auth: SignInScreen,
     App: AppNavigator,
   },
   {

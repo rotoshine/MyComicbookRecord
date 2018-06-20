@@ -4,7 +4,8 @@ import { Avatar, List, ListItem } from 'react-native-elements'
 
 import ContentsView from '../components/ContentsView'
 
-import user from '../data/user.json'
+import { loadUser } from '../utils/user'
+import UserContext from '../context/UserContext'
 
 const UserInfo = styled.View`
   display: flex;
@@ -27,16 +28,30 @@ export default class MyComicBooksRecord extends Component {
     title: '만화책 기록하기'
   }
 
+  state = {
+    user: {}
+  }
+
+  async componentDidMount () {
+    const user = await loadUser()
+
+    this.setState({
+      user
+    })
+  }
+  
   render() {
+    const { user = {}} = this.state
+
     return (
-      <ContentsView>        
+      <ContentsView>
         <UserInfo>
-          <Avatar large rounded title={user.displayName} source={{ uri: user.profileImageUrl }} />
-          <UserName>{user.displayName}</UserName>
+          <Avatar large rounded title={user.name} source={{ uri: user.photoUrl }} />
+          <UserName>{user.name}</UserName>
         </UserInfo>
         <List containerStyle={{ marginBottom: 20 }}>
         </List>
-      </ContentsView>
+      </ContentsView>      
     )
   }
 }
